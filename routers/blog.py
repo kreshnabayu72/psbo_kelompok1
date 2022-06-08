@@ -10,14 +10,14 @@ router = APIRouter(
 )
 
 @router.get('/', response_model=List[schemas.ShowBlog])
-def all(db: Session = Depends(database.get_db), current_user: schemas.User = Depends(get_current_user)):
+def all(db: Session = Depends(database.get_db)):
   blogs = db.query(models.Blog).all()
   return blogs
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create(request: schemas.Blog, db: Session = Depends(database.get_db)):
-  new_blog = models.Blog(title=request.title, body=request.body, user_id=1)
+  new_blog = models.Blog(time=request.time, body=request.body, user_id=1)
   db.add(new_blog)
   db.commit()
   db.refresh(new_blog)

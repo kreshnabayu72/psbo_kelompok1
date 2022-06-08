@@ -2,14 +2,22 @@ from typing import List, Union, Optional
 from pydantic import BaseModel
 
 
-class User(BaseModel):
+class Person(BaseModel):
   name: str
-  email: str
+  age: int
+  gender: str
+  address: str
+  telephone: str
   password: str
+
+class Patient(Person):
+  email: str
+  insurance: str 
 
 
 class BlogBase(BaseModel):
-  title: str
+  id: int
+  time: str
   body: str
   
 
@@ -17,22 +25,36 @@ class Blog(BlogBase):
   class Config():
     orm_mode = True
 
+class Visit(Blog):
+  obat: str
+  diagnosis: str
 
-class ShowUser(BaseModel):
+class ShowPerson(BaseModel):
+  id: int
   name: str
-  email: str
+  age: int
+  gender: str
+  address: str
+  telephone: str
   blogs: List[Blog] = []
   class Config():
     orm_mode = True
 
+class ShowPatient(ShowPerson):
+  email: str
+  insurance: str
+  visits: List[Visit] = [] 
 
 class ShowBlog(BaseModel):
-  title: str
+  time: str
   body: str
-  creator: ShowUser
+  creator: ShowPerson
   class Config():
     orm_mode = True
 
+class ShowVisit(ShowBlog):
+  obat: str
+  diagnosis: str
 
 class Login(BaseModel):
   username: str
