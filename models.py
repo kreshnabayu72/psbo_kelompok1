@@ -1,24 +1,61 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime
 from database import Base
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils.types import ChoiceType
 
 class Blog(Base):
   __tablename__ = "blogs"
 
   id = Column(Integer, primary_key=True, index=True)
-  title = Column(String)
+  time = Column(DateTime)
   body = Column(String)
-  user_id = Column(Integer, ForeignKey("users.id"))
+  user_id = Column(Integer, ForeignKey("person.id"))
 
-  creator = relationship("User", back_populates="blogs")
+  __mapper_args__ = {
+        "polymorphic_identity": "appointment",
+    }
 
+  creator = relationship("Person", back_populates="appointments")
 
-class User(Base):
-  __tablename__ = 'users'
+class Visit(Appointment):
+  __tablename__ = "visits"
+
+  id = Column(Integer, ForeignKey("appointments.id"), primary_key=True)
+  obat = Column(String)
+  diagnosis = Column(String)
+
+  __mapper_args__ = {
+        "polymorphic_identity": "visit",
+    }
+  
+class Request(Appointment):
+  __tablename__ = "requests"
+
+  id = Column(Integer, ForeignKey("appointments.id"), primary_key=True)
+  status = Column(String)
+  note = Column(String)
+
+  __mapper_args__ = {
+        "polymorphic_identity": "request",
+    }
+
+class Person(Base):
+  __tablename__ = 'person'
 
   id = Column(Integer, primary_key=True, index=True)
   name = Column(String)
-  email = Column(String)
+  age = Column(Integer)
+  gender = Column(String)
+  address = Column(String)
+  telephone = Column(String)
   password = Column(String)
 
-  blogs = relationship("Blog", back_populates="creator")
+  appointments = relationship("Appointment", back_populates="creator")
+
+
+class Medicine(Base):
+  __tablename__ = 'medicines'
+  id = Column(Integer, primary_key=True, index=True)
+  name = Column(String)
+  efficacy = Column(String)
+  side_effect = Column(String)
