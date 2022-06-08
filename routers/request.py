@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter(
   prefix="/request",
-  tags=['Requests']
+  tags=['Request']
 )
 
 @router.get('/', response_model=List[schemas.ShowRequest])

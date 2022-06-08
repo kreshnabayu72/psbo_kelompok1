@@ -11,10 +11,35 @@ class Person(BaseModel):
   telephone: str
   password: str
 
-class Patient(Person):
-  email: str
-  insurance: str 
+class Person_(BaseModel):  
+  name: str
+  age: int
+  sex: str
+  address: str
+  phone: str
 
+class BasePatient(Person_):
+  email: str
+  password: str
+  insurance: Optional[str]
+
+class EditPatient(Person_):
+  insurance: Optional[str]
+  class Config():
+    orm_mode = True
+
+class Patient(Person_):
+  email: str
+  class Config():
+    orm_mode = True
+
+class Doctor(Person_):
+  id_kki: str
+  specialization: str
+  class Config():
+    orm_mode = True
+
+# ================================================>
 
 class AppointmentBase(BaseModel):
   id: int
@@ -45,10 +70,13 @@ class ShowPerson(BaseModel):
   class Config():
     orm_mode = True
 
-class ShowPatient(ShowPerson):
-  email: str
-  insurance: str
+class ShowPatient(Patient):
+  requests: List[Request] = []
   visits: List[Visit] = [] 
+
+class ShowDoctor(Doctor):
+  requests: List[Request] = []
+  visits: List[Visit] = []
 
 class ShowAppointment(BaseModel):
   time: datetime
@@ -73,6 +101,16 @@ class ShowRequest(ShowAppointment):
   class Config:  
         use_enum_values = True  # <--
   
+class Medicine(BaseModel):
+  name: str
+  efficacy: str
+  side_effect: str
+  class Config():
+    orm_mode = True
+
+
+
+
 
 class Login(BaseModel):
   username: str
