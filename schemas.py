@@ -1,5 +1,6 @@
 from typing import List, Union, Optional
 from pydantic import BaseModel
+from datetime import date, datetime, time, timedelta
 from enum import Enum
 
 class Person(BaseModel):
@@ -15,21 +16,21 @@ class Patient(Person):
   insurance: str 
 
 
-class BlogBase(BaseModel):
+class AppointmentBase(BaseModel):
   id: int
-  time: str
+  time: datetime
   body: str
   
 
-class Blog(BlogBase):
+class Appointment(AppointmentBase):
   class Config():
     orm_mode = True
 
-class Visit(Blog):
+class Visit(Appointment):
   obat: str
   diagnosis: str
 
-class Request(Blog):
+class Request(Appointment):
   status: str = "PENDING"
   note: str
 
@@ -40,7 +41,7 @@ class ShowPerson(BaseModel):
   gender: str
   address: str
   telephone: str
-  blogs: List[Blog] = []
+  appointments: List[Appointment] = []
   class Config():
     orm_mode = True
 
@@ -49,14 +50,14 @@ class ShowPatient(ShowPerson):
   insurance: str
   visits: List[Visit] = [] 
 
-class ShowBlog(BaseModel):
-  time: str
+class ShowAppointment(BaseModel):
+  time: datetime
   body: str
   creator: ShowPerson
   class Config():
     orm_mode = True
 
-class ShowVisit(ShowBlog):
+class ShowVisit(ShowAppointment):
   obat: str
   diagnosis: str
 
@@ -65,7 +66,7 @@ class Request_Status(str,Enum):
   acc="acc"
   no="no"
 
-class ShowRequest(ShowBlog):
+class ShowRequest(ShowAppointment):
   status: str
   note: str
 

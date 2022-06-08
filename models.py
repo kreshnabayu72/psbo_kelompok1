@@ -1,26 +1,26 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime
 from database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils.types import ChoiceType
 
-class Blog(Base):
-  __tablename__ = "blogs"
+class Appointment(Base):
+  __tablename__ = "appointments"
 
   id = Column(Integer, primary_key=True, index=True)
-  time = Column(String)
+  time = Column(DateTime)
   body = Column(String)
   user_id = Column(Integer, ForeignKey("person.id"))
 
   __mapper_args__ = {
-        "polymorphic_identity": "blog",
+        "polymorphic_identity": "appointment",
     }
 
-  creator = relationship("Person", back_populates="blogs")
+  creator = relationship("Person", back_populates="appointments")
 
-class Visit(Blog):
+class Visit(Appointment):
   __tablename__ = "visits"
 
-  id = Column(Integer, ForeignKey("blogs.id"), primary_key=True)
+  id = Column(Integer, ForeignKey("appointments.id"), primary_key=True)
   obat = Column(String)
   diagnosis = Column(String)
 
@@ -28,10 +28,10 @@ class Visit(Blog):
         "polymorphic_identity": "visit",
     }
   
-class Request(Blog):
+class Request(Appointment):
   __tablename__ = "requests"
 
-  id = Column(Integer, ForeignKey("blogs.id"), primary_key=True)
+  id = Column(Integer, ForeignKey("appointments.id"), primary_key=True)
   status = Column(String)
   note = Column(String)
 
@@ -50,4 +50,4 @@ class Person(Base):
   telephone = Column(String)
   password = Column(String)
 
-  blogs = relationship("Blog", back_populates="creator")
+  appointments = relationship("Appointment", back_populates="creator")
