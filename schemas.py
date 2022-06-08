@@ -1,6 +1,6 @@
 from typing import List, Union, Optional
 from pydantic import BaseModel
-
+from enum import Enum
 
 class Person(BaseModel):
   name: str
@@ -29,6 +29,10 @@ class Visit(Blog):
   obat: str
   diagnosis: str
 
+class Request(Blog):
+  status: str = "PENDING"
+  note: str
+
 class ShowPerson(BaseModel):
   id: int
   name: str
@@ -55,6 +59,19 @@ class ShowBlog(BaseModel):
 class ShowVisit(ShowBlog):
   obat: str
   diagnosis: str
+
+class Request_Status(str,Enum):
+  pending="pending"
+  acc="acc"
+  no="no"
+
+class ShowRequest(ShowBlog):
+  status: str
+  note: str
+
+  class Config:  
+        use_enum_values = True  # <--
+  
 
 class Login(BaseModel):
   username: str

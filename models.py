@@ -1,6 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from database import Base
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils.types import ChoiceType
 
 class Blog(Base):
   __tablename__ = "blogs"
@@ -25,6 +26,17 @@ class Visit(Blog):
 
   __mapper_args__ = {
         "polymorphic_identity": "visit",
+    }
+  
+class Request(Blog):
+  __tablename__ = "requests"
+
+  id = Column(Integer, ForeignKey("blogs.id"), primary_key=True)
+  status = Column(String)
+  note = Column(String)
+
+  __mapper_args__ = {
+        "polymorphic_identity": "request",
     }
 
 class Person(Base):
