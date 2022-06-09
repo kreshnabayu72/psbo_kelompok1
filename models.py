@@ -1,3 +1,4 @@
+from collections import UserList
 from datetime import datetime
 from sqlalchemy import Column, Date, ForeignKey, Integer, String, Boolean, DateTime
 from database import Base
@@ -22,29 +23,29 @@ from sqlalchemy_utils.types import ChoiceType
 class Request(Base):
   __tablename__ = "requests"
 
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, index=True)
   datetime = Column(String)
   status = Column(String)
   note = Column(String)
   patient_id = Column(Integer, ForeignKey("patients.id"))
   doctor_id = Column(Integer, ForeignKey("doctors.id"))
 
-  patient = relationship("Patient", back_populates="requests")
-  doctor = relationship("Doctor", back_populates="requests")
+  patient = relationship("Patient", back_populates="requests", uselist=False)
+  doctor = relationship("Doctor", back_populates="requests", uselist=False)
 
 
 class Visit(Base):
   __tablename__ = "visits"
 
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, index=True)
   datetime = Column(String)
-  medicine = Column(String)
-  diagnosis = Column(String)
   patient_id = Column(Integer, ForeignKey("patients.id"))
   doctor_id = Column(Integer, ForeignKey("doctors.id"))  
 
-  patient = relationship("Patient", back_populates="visits")
-  doctor = relationship("Doctor", back_populates="visits")
+  patient = relationship("Patient", back_populates="visits", uselist=False)
+  doctor = relationship("Doctor", back_populates="visits", uselist=False)
+  diagnosis = relationship("Diagnosis", back_populates="visits", uselist=False)
+  medicine = relationship("Medicine", back_populates="visits")
   
 
 # class Person(Base):
@@ -73,7 +74,7 @@ class Person_(Base):
 
 class Patient(Person_):
   __tablename__ = 'patients'
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, index=True)
   email = Column(String)
   password = Column(String)
   insurance = Column(String)
@@ -87,7 +88,7 @@ class Patient(Person_):
 
 class Doctor(Person_):
   __tablename__ = 'doctors'
-  id = Column(Integer, primary_key=True)
+  id = Column(Integer, primary_key=True, index=True)
   id_kki = Column(String)
   specialization = Column(String)
   
@@ -98,6 +99,17 @@ class Doctor(Person_):
       'polymorphic_identity': 'doctor',
   }
 
+class Diagnosis(Base):
+  __tablename__ = 'diagnoses'
+
+  id = Column(Integer, primary_key=True, index=True)
+  symptom = Column(String)
+  disease = Column(String)
+  suggestion = Column(String)
+  visit_id = Column(Integer, ForeignKey("visits.id"))
+
+  visit = relationship("Visit", back_populates="diagnosis")
+
 class Medicine(Base):
   __tablename__ = 'medicines'
 
@@ -105,3 +117,6 @@ class Medicine(Base):
   name = Column(String)
   efficacy = Column(String)
   side_effect = Column(String)
+
+  visit = relationship("Visit", back_populates="medicine")
+  
