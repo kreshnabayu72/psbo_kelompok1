@@ -82,7 +82,8 @@ class ShowDoctor(ShowPerson):
 class ShowAppointment(BaseModel):
   id: int
   time: datetime
-  creator: ShowPersonLite
+  patient: ShowPersonLite
+  doctor: ShowPersonLite
   class Config():
     orm_mode = True
 

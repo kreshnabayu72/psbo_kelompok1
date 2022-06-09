@@ -5,8 +5,6 @@ from sqlalchemy_utils.types import ChoiceType
 import enums
 
 
-
-
 class Person(Base):
   __tablename__ = 'person'
 
@@ -22,7 +20,7 @@ class Person(Base):
         "polymorphic_identity": "person",
     }
 
-  appointments = relationship("Appointment", back_populates="creator")
+  appointments = relationship("Appointment", back_populates="patient")
 
 class Patient(Person):
   __tablename__ = 'patient'
@@ -59,7 +57,8 @@ class Appointment(Base):
         "polymorphic_identity": "appointment",
     }
 
-  creator = relationship("Person", back_populates="appointments")
+  patient = relationship("Person", back_populates="appointments")
+  doctor = relationship("Person", back_populates="appointments")
 
 class Visit(Appointment):
   __tablename__ = "visits"
