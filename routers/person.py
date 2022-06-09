@@ -1,4 +1,4 @@
-import schemas, database, models
+import schemas, database, models, enums
 from hashing import Hash
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
@@ -19,7 +19,7 @@ def create_person(request: schemas.Person, db: Session = Depends(database.get_db
   return new_person
 
 @router.get('/', response_model=List[schemas.ShowPerson])
-def get_person(db: Session = Depends(database.get_db)):
+def get_all_person(db: Session = Depends(database.get_db)):
   person = db.query(models.Person).all()
   return person
 
