@@ -6,7 +6,7 @@ import enums
 
 
 class Person(Base):
-  __tablename__ = 'person'
+  __abstract__ = True
 
   id = Column(Integer, primary_key=True, index=True)
   name = Column(String)
@@ -16,34 +16,36 @@ class Person(Base):
   telephone = Column(String)
   password = Column(String)
 
-  __mapper_args__ = {
-        "polymorphic_identity": "person",
-    }
-
-  appointments = relationship("Appointment", back_populates="patient")
+  # appointments = relationship("Appointment", back_populates="patient")
 
 class Patient(Person):
   __tablename__ = 'patient'
 
-  id = Column(Integer, ForeignKey("person.id"), primary_key=True)
+  # person_id = Column(Integer, ForeignKey("person.id"), primary_key=True)
+  id = Column(Integer, primary_key=True, index=True)
   email = Column(String)
   insurance = Column(String)
 
   __mapper_args__ = {
         "polymorphic_identity": "patient",
+        "concrete": True
     }
+  appointments = relationship("Appointment", back_populates="patient")
 
 class Doctor(Person):
   __tablename__ = 'doctor'
-
-  id = Column(Integer, ForeignKey("person.id"), primary_key=True)
+  
+  id = Column(Integer, primary_key=True, index=True)
+  # person_id = Column(Integer, ForeignKey("person.id"), primary_key=True)
   doctor_id = Column(String)
   specialist = Column(String)
 
   __mapper_args__ = {
         "polymorphic_identity": "doctor",
+        "concrete": True
     }
 
+  appointments = relationship("Appointment", back_populates="doctor")
 
 
 class Appointment(Base):
@@ -51,14 +53,15 @@ class Appointment(Base):
 
   id = Column(Integer, primary_key=True, index=True)
   time = Column(DateTime)
-  user_id = Column(Integer, ForeignKey("person.id"))
+  patient_id = Column(Integer, ForeignKey("patient.id"))
+  doctor_id = Column(Integer, ForeignKey("doctor.id"))
 
   __mapper_args__ = {
         "polymorphic_identity": "appointment",
     }
 
-  patient = relationship("Person", back_populates="appointments")
-  doctor = relationship("Person", back_populates="appointments")
+  patient = relationship("Patient", back_populates="appointments")
+  doctor = relationship("Doctor", back_populates="appointments")
 
 class Visit(Appointment):
   __tablename__ = "visits"
@@ -81,3 +84,10 @@ class Request(Appointment):
   __mapper_args__ = {
         "polymorphic_identity": "request",
     }
+  
+class Medicine(Base):
+  __tablename__ = "medicine"
+
+  id = Column(Integer, primary_key=True, index=True)
+  name = Column(String)
+  function = Column(String)

@@ -4,7 +4,6 @@ from pydantic import BaseModel
 from datetime import date, datetime, time, timedelta
 
 class Person(BaseModel):
-  id: int
   name: str
   age: int
   gender: str
@@ -20,10 +19,18 @@ class Doctor(Person):
   doctor_id:str
   specialist:str
 
+class Medicine(BaseModel):
+  id: int
+  name: str 
+  function: str
+  class Config():
+    orm_mode = True
 
 class AppointmentBase(BaseModel):
   id: int
   time: datetime
+  doctor: Doctor
+  patient: Patient
 
 class Appointment(AppointmentBase):
   class Config():
@@ -38,12 +45,6 @@ class Request(Appointment):
   status: enums.Request_Status = enums.Request_Status.Pending
   note: str
 
-class Medicine(BaseModel):
-  id: int
-  name: str 
-  function: str
-  class Config():
-    orm_mode = True
   
 class Diagnosis(BaseModel):
   symptom: str
