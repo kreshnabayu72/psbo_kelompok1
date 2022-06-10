@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Enum
 from database import Base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship,backref
 from sqlalchemy_utils.types import ChoiceType
 import enums
 
@@ -48,6 +48,12 @@ class Doctor(Person):
   visits = relationship("Visit", backref="doctor")
   requests = relationship("Request", backref="doctor")
 
+class Medicine(Base):
+  __tablename__ = "medicine"
+
+  id = Column(Integer, primary_key=True, index=True)
+  name = Column(String)
+  function = Column(String)
 
 class Appointment(Base):
   __tablename__ = "appointments"
@@ -68,8 +74,9 @@ class Visit(Appointment):
   doctor_db_id = Column(Integer, ForeignKey("doctor.id"))
   obat = Column(String)
   diagnosis = Column(String)
-
-  # medicine = relationship("Medicine")
+  medicine = relationship("Medicine", backref=backref("visit", uselist=False))
+  medicine_id = Column(Integer, ForeignKey("medicine.id"))
+  
   __mapper_args__ = {
         "polymorphic_identity": "visit",
         "concrete": True
@@ -90,9 +97,3 @@ class Request(Appointment):
         "concrete": True
     }
 
-class Medicine(Base):
-  __tablename__ = "medicine"
-
-  id = Column(Integer, primary_key=True, index=True)
-  name = Column(String)
-  function = Column(String)

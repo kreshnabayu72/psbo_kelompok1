@@ -43,6 +43,8 @@ class Appointment(BaseModel):
 class Visit(Appointment):
   obat: str
   diagnosis: str
+  medicine_id: Optional[int]
+  medicine: Optional[Medicine]
 
 class Request(Appointment):
   status: enums.Request_Status = enums.Request_Status.Pending
@@ -95,6 +97,8 @@ class ShowAppointment(BaseModel):
 class ShowVisit(ShowAppointment):
   obat: str
   diagnosis: str
+  medicine_id: Optional[int]
+  medicine: Optional[Medicine]
 
 
 class ShowRequest(ShowAppointment):
