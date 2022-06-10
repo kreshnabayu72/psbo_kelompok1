@@ -17,7 +17,7 @@ def all(db: Session = Depends(database.get_db)):
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create(request: schemas.Visit, db: Session = Depends(database.get_db)):
-  new_visit = models.Visit(time=request.time,obat=request.obat, diagnosis=request.diagnosis, user_id=1)
+  new_visit = models.Visit(time=request.time,obat=request.obat, diagnosis=request.diagnosis, patient_id=1,doctor_id=1)
   db.add(new_visit)
   db.commit()
   db.refresh(new_visit)
