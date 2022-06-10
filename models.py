@@ -16,12 +16,10 @@ class Person(Base):
   telephone = Column(String)
   password = Column(String)
 
-  # appointments = relationship("Appointment", back_populates="patient")
 
 class Patient(Person):
   __tablename__ = 'patient'
 
-  # person_id = Column(Integer, ForeignKey("person.id"), primary_key=True)
   id = Column(Integer, primary_key=True, index=True)
   email = Column(String)
   insurance = Column(String)
@@ -30,7 +28,9 @@ class Patient(Person):
         "polymorphic_identity": "patient",
         "concrete": True
     }
-  appointments = relationship("Appointment", back_populates="patient")
+  
+  visits = relationship("Visit", backref="patient")
+  requests = relationship("Request", backref="patient")
 
 class Doctor(Person):
   __tablename__ = 'doctor'
@@ -45,7 +45,8 @@ class Doctor(Person):
         "concrete": True
     }
 
-  appointments = relationship("Appointment", back_populates="doctor")
+  visits = relationship("Visit", backref="doctor")
+  requests = relationship("Request", backref="doctor")
 
 
 class Appointment(Base):
@@ -53,38 +54,42 @@ class Appointment(Base):
 
   id = Column(Integer, primary_key=True, index=True)
   time = Column(DateTime)
-  patient_id = Column(Integer, ForeignKey("patient.id"))
-  doctor_id = Column(Integer, ForeignKey("doctor.id"))
-
+ 
   __mapper_args__ = {
         "polymorphic_identity": "appointment",
     }
 
-  patient = relationship("Patient", back_populates="appointments")
-  doctor = relationship("Doctor", back_populates="appointments")
-
 class Visit(Appointment):
-  __tablename__ = "visits"
+  __tablename__ = "visit"
 
-  id = Column(Integer, ForeignKey("appointments.id"), primary_key=True)
+  id = Column(Integer, primary_key=True, index=True)
+  time = Column(DateTime)
+  patient_id = Column(Integer, ForeignKey("patient.id"))
+  doctor_db_id = Column(Integer, ForeignKey("doctor.id"))
   obat = Column(String)
   diagnosis = Column(String)
 
+  # medicine = relationship("Medicine")
   __mapper_args__ = {
         "polymorphic_identity": "visit",
+        "concrete": True
     }
   
 class Request(Appointment):
   __tablename__ = "requests"
 
-  id = Column(Integer, ForeignKey("appointments.id"), primary_key=True)
+  id = Column(Integer, primary_key=True, index=True)
+  time = Column(DateTime)
+  patient_id = Column(Integer, ForeignKey("patient.id"))
+  doctor_db_id = Column(Integer, ForeignKey("doctor.id"))
   status = Column(Enum(enums.Request_Status))
   note = Column(String)
 
   __mapper_args__ = {
         "polymorphic_identity": "request",
+        "concrete": True
     }
-  
+
 class Medicine(Base):
   __tablename__ = "medicine"
 

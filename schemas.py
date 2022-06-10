@@ -20,22 +20,25 @@ class Doctor(Person):
   specialist:str
 
 class Medicine(BaseModel):
+  name: str 
+  function: str
+  class Config():
+    orm_mode = True
+
+class ShowMedicine(BaseModel):
   id: int
   name: str 
   function: str
   class Config():
     orm_mode = True
 
-class AppointmentBase(BaseModel):
-  id: int
+class Appointment(BaseModel):
   time: datetime
-  doctor: Doctor
-  patient: Patient
-
-class Appointment(AppointmentBase):
+  doctor_db_id: int=1
+  patient_id: int=1
   class Config():
     orm_mode = True
-    
+
 
 class Visit(Appointment):
   obat: str
@@ -58,7 +61,8 @@ class ShowPerson(BaseModel):
   gender: str
   address: str
   telephone: str
-  appointments: List[Appointment] = []
+  visits: List[Visit] = []
+  requests: List[Request] = []
   class Config():
     orm_mode = True
 
@@ -83,8 +87,8 @@ class ShowDoctor(ShowPerson):
 class ShowAppointment(BaseModel):
   id: int
   time: datetime
-  patient: ShowPersonLite
-  doctor: ShowPersonLite
+  patient_id: int
+  doctor_db_id: int
   class Config():
     orm_mode = True
 
@@ -98,7 +102,7 @@ class ShowRequest(ShowAppointment):
   note: str
 
   class Config:  
-        use_enum_values = True  # <--
+        use_enum_values = True  
   
 
 class Login(BaseModel):
