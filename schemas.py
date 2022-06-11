@@ -1,7 +1,7 @@
+import enums
 from typing import List, Union, Optional
 from pydantic import BaseModel
 from datetime import date, datetime, time, timedelta
-from enum import Enum
 
 class Person(BaseModel):
   name: str
@@ -15,24 +15,46 @@ class Patient(Person):
   email: str
   insurance: str 
 
+class Doctor(Person):
+  doctor_id:str
+  specialist:str
 
-class AppointmentBase(BaseModel):
-  id: int
-  time: datetime
-  body: str
-  
-
-class Appointment(AppointmentBase):
+class Medicine(BaseModel):
+  name: str 
+  function: str
   class Config():
     orm_mode = True
+
+class ShowMedicine(BaseModel):
+  id: int
+  name: str 
+  function: str
+  class Config():
+    orm_mode = True
+
+class Appointment(BaseModel):
+  time: datetime
+  doctor_db_id: int=1
+  patient_id: int=1
+  class Config():
+    orm_mode = True
+
 
 class Visit(Appointment):
   obat: str
   diagnosis: str
+  medicine_id: Optional[int]
+  medicine: Optional[Medicine]
 
 class Request(Appointment):
-  status: str = "PENDING"
+  status: enums.Request_Status = enums.Request_Status.Pending
   note: str
+
+  
+class Diagnosis(BaseModel):
+  symptom: str
+  illness: str
+  advice: str
 
 class ShowPerson(BaseModel):
   id: int
@@ -41,37 +63,50 @@ class ShowPerson(BaseModel):
   gender: str
   address: str
   telephone: str
-  appointments: List[Appointment] = []
+  visits: List[Visit] = []
+  requests: List[Request] = []
+  class Config():
+    orm_mode = True
+
+class ShowPersonLite(BaseModel):
+  id: int
+  name: str
   class Config():
     orm_mode = True
 
 class ShowPatient(ShowPerson):
   email: str
   insurance: str
-  visits: List[Visit] = [] 
+  class Config():
+    orm_mode = True
+
+class ShowDoctor(ShowPerson):
+  doctor_id:str
+  specialist:str
+  class Config():
+    orm_mode = True
 
 class ShowAppointment(BaseModel):
+  id: int
   time: datetime
-  body: str
-  creator: ShowPerson
+  patient_id: int
+  doctor_db_id: int
   class Config():
     orm_mode = True
 
 class ShowVisit(ShowAppointment):
   obat: str
   diagnosis: str
+  medicine_id: Optional[int]
+  medicine: Optional[Medicine]
 
-class Request_Status(str,Enum):
-  pending="pending"
-  acc="acc"
-  no="no"
 
 class ShowRequest(ShowAppointment):
-  status: str
+  status: enums.Request_Status = enums.Request_Status.Pending
   note: str
 
   class Config:  
-        use_enum_values = True  # <--
+        use_enum_values = True  
   
 
 class Login(BaseModel):
