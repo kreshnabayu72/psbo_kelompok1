@@ -15,7 +15,7 @@ def all(db: Session = Depends(database.get_db)):
   return visits
 
 
-@router.post('/', status_code=status.HTTP_201_CREATED)
+@router.post('/', status_code=status.HTTP_201_CREATED,response_model=schemas.ShowVisit)
 def create(request: schemas.InsertVisit, db: Session = Depends(database.get_db)):
   medicine = db.query(models.Medicine).filter(models.Medicine.id == request.medicine.id)
   
