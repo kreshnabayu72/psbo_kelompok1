@@ -55,6 +55,14 @@ class Medicine(Base):
   efficacy = Column(String)
   side_effect = Column(String)
 
+class Diagnosis(Base):
+  __tablename__ = "diagnosis"
+
+  id = Column(Integer, primary_key=True, index=True)
+  symptom = Column(String)
+  illness = Column(String)
+  advice = Column(String)
+
 class Appointment(Base):
   __abstract__ = True
   
@@ -68,12 +76,13 @@ class Visit(Appointment):
   __tablename__ = "visit"
 
   id = Column(Integer, primary_key=True, index=True)
-  diagnosis = Column(String)
   
   patient_id = Column(Integer, ForeignKey("patient.id"))
   doctor_db_id = Column(Integer, ForeignKey("doctor.id"))
   medicine = relationship("Medicine", backref=backref("visit", uselist=False))
   medicine_id = Column(Integer, ForeignKey("medicine.id"))
+  diagnosis = relationship("Diagnosis", backref=backref("visit", uselist=False))
+  diagnosis_id = Column(Integer, ForeignKey("diagnosis.id"))
   
   __mapper_args__ = {
         "polymorphic_identity": "visit",

@@ -41,7 +41,14 @@ class ShowMedicine(BaseModel):
     orm_mode = True
 
 class InsertMedicine(BaseModel):
-  name: str
+  id: int
+
+class InsertDiagnosis(BaseModel):
+  symptom: str
+  illness: str
+  advice: str
+  class Config():
+    orm_mode = True
 
 class Appointment(BaseModel):
   time: datetime
@@ -50,24 +57,27 @@ class Appointment(BaseModel):
   class Config():
     orm_mode = True
 
+class Diagnosis(BaseModel):
+  symptom: str
+  illness: str
+  advice: str
+  class Config():
+    orm_mode = True
+
 class Visit(Appointment):
-  diagnosis: str
   _id: Optional[int]
   medicine: Optional[Medicine]
+  dignosis: Optional[Diagnosis]
 
 class InsertVisit(Appointment):
-  diagnosis: str
   _id: Optional[int]
   medicine: Optional[InsertMedicine]
+  diagnosis: Optional[InsertDiagnosis]
 
 class Request(Appointment):
   status: enums.Request_Status = enums.Request_Status.Pending
   note: str
  
-class Diagnosis(BaseModel):
-  symptom: str
-  illness: str
-  advice: str
 
 class ShowPerson(BaseModel):
   id: int
@@ -108,9 +118,10 @@ class ShowAppointment(BaseModel):
     orm_mode = True
 
 class ShowVisit(ShowAppointment):
-  diagnosis: str
   medicine_id: Optional[int]
   medicine: Optional[Medicine]
+  diagnosis_id: Optional[int]
+  diagnosis: Optional[Diagnosis]
 
 class ShowRequest(ShowAppointment):
   status: enums.Request_Status = enums.Request_Status.Pending
