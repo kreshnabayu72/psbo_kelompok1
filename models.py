@@ -14,7 +14,6 @@ class Person(Base):
   gender = Column(String)
   address = Column(String)
   telephone = Column(String)
-  password = Column(String)
 
 
 class Patient(Person):
@@ -23,6 +22,7 @@ class Patient(Person):
   id = Column(Integer, primary_key=True, index=True)
   email = Column(String)
   insurance = Column(String)
+  password = Column(String)
 
   __mapper_args__ = {
         "polymorphic_identity": "patient",
@@ -37,7 +37,7 @@ class Doctor(Person):
   
   id = Column(Integer, primary_key=True, index=True)
   # person_id = Column(Integer, ForeignKey("person.id"), primary_key=True)
-  doctor_id = Column(String)
+  id_kki = Column(String)
   specialist = Column(String)
 
   __mapper_args__ = {
@@ -53,13 +53,13 @@ class Medicine(Base):
 
   id = Column(Integer, primary_key=True, index=True)
   name = Column(String)
-  function = Column(String)
+  efficacy = Column(String)
+  side_effect = Column(String)
 
 class Appointment(Base):
   __abstract__ = True
-
-  # id = Column(Integer, primary_key=True, index=True)
-  # time = Column(DateTime)
+  
+  time = Column(DateTime)
  
   __mapper_args__ = {
         "polymorphic_identity": "appointment",
@@ -69,11 +69,10 @@ class Visit(Appointment):
   __tablename__ = "visit"
 
   id = Column(Integer, primary_key=True, index=True)
-  time = Column(DateTime)
+  diagnosis = Column(String)
+  
   patient_id = Column(Integer, ForeignKey("patient.id"))
   doctor_db_id = Column(Integer, ForeignKey("doctor.id"))
-  obat = Column(String)
-  diagnosis = Column(String)
   medicine = relationship("Medicine", backref=backref("visit", uselist=False))
   medicine_id = Column(Integer, ForeignKey("medicine.id"))
   

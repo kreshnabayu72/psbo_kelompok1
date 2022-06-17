@@ -84,7 +84,6 @@ class ShowPatient(ShowPerson):
     orm_mode = True
 
 class ShowDoctor(ShowPerson):
-  doctor_id:str
   id_kki: str
   specialist:str
   class Config():
@@ -99,7 +98,6 @@ class ShowAppointment(BaseModel):
     orm_mode = True
 
 class ShowVisit(ShowAppointment):
-  obat: str
   diagnosis: str
   medicine_id: Optional[int]
   medicine: Optional[Medicine]
