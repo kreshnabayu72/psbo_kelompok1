@@ -1,3 +1,4 @@
+from msilib import schema
 from pydoc import doc
 
 from requests import Response
@@ -43,3 +44,12 @@ def update(id: int, request: schemas.Doctor, db: Session = Depends(database.get_
   db.commit()
   respons = db.query(models.Doctor).filter(models.Doctor.id == id).first()
   return respons
+
+@router.delete('/delete/{id}')
+def delete(id: int, db: Session = Depends(database.get_db)):
+  doctor = db.query(models.Doctor).filter(models.Doctor.id == id)
+  if not doctor.first():
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Doctor with the ID {id} doesn't exists!")
+  doctor.delete()
+  db.commit()
+  return 'Doctor has been deleted!'
