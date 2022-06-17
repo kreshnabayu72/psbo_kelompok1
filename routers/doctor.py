@@ -14,14 +14,14 @@ router = APIRouter(
 )
 
 @router.get('/', response_model=List[schemas.ShowDoctor])
-def get_all_doctor(db: Session = Depends(database.get_db)):
+async def get_all_doctor(db: Session = Depends(database.get_db)):
   doctor = db.query(models.Doctor).all()
 
   return doctor
 
 @router.post('/', response_model=schemas.ShowDoctor)
-def create_doctor(request: schemas.Doctor, db: Session = Depends(database.get_db)):
-  new_doctor = models.Doctor(name=request.name, age=request.age,gender=request.gender,address=request.address,telephone=request.telephone, id_kki=request.id_kki,specialist=request.specialist)
+async def create_doctor(request: schemas.Doctor, db: Session = Depends(database.get_db)):
+  new_doctor = models.Doctor(name=request.name, birthdate=request.birthdate,gender=request.gender,address=request.address,telephone=request.telephone, id_kki=request.id_kki,specialist=request.specialist)
   db.add(new_doctor)
   db.commit()
   db.refresh(new_doctor)

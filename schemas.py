@@ -5,7 +5,7 @@ from datetime import date, datetime, time, timedelta
 
 class Person(BaseModel):
   name: str
-  age: int
+  birthdate: date
   gender: str
   address: str
   telephone: str
@@ -40,6 +40,9 @@ class ShowMedicine(BaseModel):
   class Config():
     orm_mode = True
 
+class InsertMedicine(BaseModel):
+  name: str
+
 class Appointment(BaseModel):
   time: datetime
   doctor_db_id: int=1
@@ -51,6 +54,11 @@ class Visit(Appointment):
   diagnosis: str
   _id: Optional[int]
   medicine: Optional[Medicine]
+
+class InsertVisit(Appointment):
+  diagnosis: str
+  _id: Optional[int]
+  medicine: Optional[InsertMedicine]
 
 class Request(Appointment):
   status: enums.Request_Status = enums.Request_Status.Pending
@@ -64,7 +72,7 @@ class Diagnosis(BaseModel):
 class ShowPerson(BaseModel):
   id: int
   name: str
-  age: int
+  birthdate: date
   gender: str
   address: str
   telephone: str
@@ -115,6 +123,13 @@ class Login(BaseModel):
   username: str
   password: str
 
+<<<<<<< HEAD
+=======
+class Settings(BaseModel):
+    authjwt_secret_key:str='b4bb9013c1c03b29b9311ec0df07f3b0d8fd13edd02d5c45b2fa7b86341fa405'
+
+
+>>>>>>> 8558ac9cdcc3c6a67f2e659a3090b9cdf6be36fa
 class Token(BaseModel):
   access_token: str
   token_type: str
