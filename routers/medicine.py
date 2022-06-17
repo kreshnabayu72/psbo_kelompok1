@@ -17,7 +17,7 @@ def get_all_medicine(db: Session = Depends(database.get_db)):
 
 @router.post('/', response_model=schemas.ShowMedicine)
 def create_medicine(request: schemas.Medicine, db: Session = Depends(database.get_db)):
-  new_medicine = models.Medicine(name=request.name, function=request.function)
+  new_medicine = models.Medicine(name=request.name, efficacy=request.efficacy,side_effect=request.side_effect)
   db.add(new_medicine)
   db.commit()
   db.refresh(new_medicine)

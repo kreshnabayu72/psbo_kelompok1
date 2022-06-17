@@ -9,26 +9,30 @@ class Person(BaseModel):
   gender: str
   address: str
   telephone: str
-  password: str
+  
 
 class Patient(Person):
   email: str
   insurance: str 
+  password: str
 
 class Doctor(Person):
-  doctor_id:str
+  id_kki:str
   specialist:str
 
 class Medicine(BaseModel):
   name: str 
-  function: str
+  efficacy: str
+  side_effect: str
   class Config():
     orm_mode = True
 
 class ShowMedicine(BaseModel):
   id: int
   name: str 
-  function: str
+  efficacy: str
+  side_effect: str
+  
   class Config():
     orm_mode = True
 
@@ -41,9 +45,8 @@ class Appointment(BaseModel):
 
 
 class Visit(Appointment):
-  obat: str
   diagnosis: str
-  medicine_id: Optional[int]
+  _id: Optional[int]
   medicine: Optional[Medicine]
 
 class Request(Appointment):
@@ -82,6 +85,7 @@ class ShowPatient(ShowPerson):
 
 class ShowDoctor(ShowPerson):
   doctor_id:str
+  id_kki: str
   specialist:str
   class Config():
     orm_mode = True

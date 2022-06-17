@@ -56,10 +56,10 @@ class Medicine(Base):
   function = Column(String)
 
 class Appointment(Base):
-  __tablename__ = "appointments"
+  __abstract__ = True
 
-  id = Column(Integer, primary_key=True, index=True)
-  time = Column(DateTime)
+  # id = Column(Integer, primary_key=True, index=True)
+  # time = Column(DateTime)
  
   __mapper_args__ = {
         "polymorphic_identity": "appointment",

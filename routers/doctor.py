@@ -17,7 +17,7 @@ def get_all_doctor(db: Session = Depends(database.get_db)):
 
 @router.post('/', response_model=schemas.ShowDoctor)
 def create_doctor(request: schemas.Doctor, db: Session = Depends(database.get_db)):
-  new_doctor = models.Doctor(name=request.name, age=request.age,gender=request.gender,address=request.address,telephone=request.telephone, doctor_id=request.doctor_id,specialist=request.specialist,password=Hash.bcrypt(request.password))
+  new_doctor = models.Doctor(name=request.name, age=request.age,gender=request.gender,address=request.address,telephone=request.telephone, id_kki=request.id_kki,specialist=request.specialist,password=Hash.bcrypt(request.password))
   db.add(new_doctor)
   db.commit()
   db.refresh(new_doctor)
