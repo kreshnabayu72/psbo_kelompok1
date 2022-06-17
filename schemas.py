@@ -50,6 +50,11 @@ class Appointment(BaseModel):
 class Visit(Appointment):
   diagnosis: str
   _id: Optional[int]
+  medicine: Optional[Medicine]
+
+class InsertVisit(Appointment):
+  diagnosis: str
+  _id: Optional[int]
   medicine: Optional[InsertMedicine]
 
 class Request(Appointment):

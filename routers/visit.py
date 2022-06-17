@@ -16,11 +16,16 @@ def all(db: Session = Depends(database.get_db)):
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
-def create(request: schemas.Visit, db: Session = Depends(database.get_db)):
-  
-  # logged_in_patient = db.query(models.Patient).filter(models.Patient.email == subject).first()
+def create(request: schemas.InsertVisit, db: Session = Depends(database.get_db)):
   medicine = db.query(models.Medicine).filter(models.Medicine.name == request.medicine.name).first()
-  new_visit = models.Visit(time=request.time, diagnosis=request.diagnosis, patient_id=request.patient_id,doctor_db_id=request.doctor_db_id,medicine_id=1)
+  
+  try:
+    new_visit = models.Visit(time=request.time, diagnosis=request.diagnosis, patient_id=request.patient_id,doctor_db_id=request.doctor_db_id,medicine_id=medicine.id)      
+
+  except Exception as e:
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+      detail="Medicine not found"
+    )
 
   db.add(new_visit)
   db.commit()
