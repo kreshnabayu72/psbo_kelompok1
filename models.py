@@ -1,14 +1,14 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Enum
 from database import Base
 from sqlalchemy.orm import relationship,backref
-from sqlalchemy_utils.types import ChoiceType
+# from sqlalchemy_utils.types import ChoiceType
 import enums
 
 
 class Person(Base):
   __abstract__ = True
 
-  id = Column(Integer, primary_key=True, index=True)
+  # id = Column(Integer, primary_key=True, index=True)
   name = Column(String)
   age = Column(Integer)
   gender = Column(String)

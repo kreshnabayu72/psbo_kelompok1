@@ -15,10 +15,14 @@ class Patient(Person):
   email: str
   insurance: str 
   password: str
+  class Config():
+    orm_mode = True
 
 class Doctor(Person):
   id_kki:str
   specialist:str
+  class Config():
+    orm_mode = True
 
 class Medicine(BaseModel):
   name: str 
@@ -43,7 +47,6 @@ class Appointment(BaseModel):
   class Config():
     orm_mode = True
 
-
 class Visit(Appointment):
   diagnosis: str
   _id: Optional[int]
@@ -52,8 +55,7 @@ class Visit(Appointment):
 class Request(Appointment):
   status: enums.Request_Status = enums.Request_Status.Pending
   note: str
-
-  
+ 
 class Diagnosis(BaseModel):
   symptom: str
   illness: str
@@ -102,7 +104,6 @@ class ShowVisit(ShowAppointment):
   medicine_id: Optional[int]
   medicine: Optional[Medicine]
 
-
 class ShowRequest(ShowAppointment):
   status: enums.Request_Status = enums.Request_Status.Pending
   note: str
@@ -110,16 +111,13 @@ class ShowRequest(ShowAppointment):
   class Config:  
         use_enum_values = True  
   
-
 class Login(BaseModel):
   username: str
   password: str
 
-
 class Token(BaseModel):
   access_token: str
   token_type: str
-
 
 class TokenData(BaseModel):
   username: Optional[str] = None
