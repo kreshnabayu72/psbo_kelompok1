@@ -39,7 +39,6 @@ def update(id: int, request: schemas.Doctor, db: Session = Depends(database.get_
   doctor = db.query(models.Doctor).filter(models.Doctor.id == id)
   if not doctor.first():
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Doctor with the ID {id} doesn't exists!")
-  # tmp = jsonable_encoder(request)
   doctor.update(request.dict())
   db.commit()
   respons = db.query(models.Doctor).filter(models.Doctor.id == id).first()
