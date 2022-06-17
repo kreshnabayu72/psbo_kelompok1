@@ -18,9 +18,9 @@ def get_all_patient(db: Session = Depends(database.get_db)):
 
   return patient
 
-@router.post('/', response_model=schemas.ShowPatient)
+@router.post('/', response_model=schemas.ShowPatient,description="You are geh")
 def create_patient(request: schemas.Patient, db: Session = Depends(database.get_db)):
-  new_patient = models.Patient(name=request.name, age=request.age,gender=request.gender,address=request.address,telephone=request.telephone, email=request.email,insurance=request.insurance,password=Hash.bcrypt(request.password))
+  new_patient = models.Patient(name=request.name,birthdate=request.birthdate,gender=request.gender,address=request.address,telephone=request.telephone, email=request.email,insurance=request.insurance,password=Hash.bcrypt(request.password))
   db.add(new_patient)
   db.commit()
   db.refresh(new_patient)
@@ -29,6 +29,13 @@ def create_patient(request: schemas.Patient, db: Session = Depends(database.get_
 
 @router.get('/visit-list-auth/', response_model=List[schemas.Visit])
 def get_all_list(db: Session = Depends(database.get_db),Authorize:AuthJWT=Depends()):
+  """
+    - Harus pake aplikasi lain
+
+    - Di Request Headers, masukkan value Authorization = Bearer (JWT Token)
+
+    - JWT Token berupa access_token, diperoleh dari login
+  """
 
   try:
         Authorize.jwt_required()

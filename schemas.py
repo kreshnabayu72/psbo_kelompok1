@@ -5,7 +5,7 @@ from datetime import date, datetime, time, timedelta
 
 class Person(BaseModel):
   name: str
-  age: int
+  birthdate: date
   gender: str
   address: str
   telephone: str
@@ -70,7 +70,7 @@ class Diagnosis(BaseModel):
 class ShowPerson(BaseModel):
   id: int
   name: str
-  age: int
+  birthdate: date
   gender: str
   address: str
   telephone: str

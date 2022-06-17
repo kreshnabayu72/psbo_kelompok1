@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Enum
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime,Date, Enum
 from database import Base
 from sqlalchemy.orm import relationship,backref
 from sqlalchemy_utils.types import ChoiceType
@@ -10,7 +10,7 @@ class Person(Base):
 
   id = Column(Integer, primary_key=True, index=True)
   name = Column(String)
-  age = Column(Integer)
+  birthdate = Column(Date)
   gender = Column(String)
   address = Column(String)
   telephone = Column(String)
@@ -36,7 +36,6 @@ class Doctor(Person):
   __tablename__ = 'doctor'
   
   id = Column(Integer, primary_key=True, index=True)
-  # person_id = Column(Integer, ForeignKey("person.id"), primary_key=True)
   id_kki = Column(String)
   specialist = Column(String)
 
