@@ -18,7 +18,7 @@ def get_all_patient(db: Session = Depends(database.get_db)):
 
   return patient
 
-@router.post('/', response_model=schemas.ShowPatient,description="You are geh")
+@router.post('/', response_model=schemas.ShowPatient)
 def create_patient(request: schemas.Patient, db: Session = Depends(database.get_db)):
   new_patient = models.Patient(name=request.name,birthdate=request.birthdate,gender=request.gender,address=request.address,telephone=request.telephone, email=request.email,insurance=request.insurance,password=Hash.bcrypt(request.password))
   db.add(new_patient)
@@ -63,7 +63,7 @@ async def login(user:schemas.Login,db: Session = Depends(database.get_db),Author
             ```
         and returns a token pair `access` and `refresh`
     """
-    db_user=db.query(models.Patient).filter(models.Patient.email=="string").first()
+    db_user=db.query(models.Patient).filter(models.Patient.email==user.email).first()
 
     if db_user:
         access_token=Authorize.create_access_token(subject=db_user.email)

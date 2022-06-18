@@ -1,7 +1,7 @@
 from msilib import schema
 from pydoc import doc
 
-from requests import Response
+# from requests import Response
 import schemas, database, models
 from hashing import Hash
 from fastapi import APIRouter, Depends, status, HTTPException

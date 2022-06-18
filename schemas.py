@@ -120,7 +120,7 @@ class ShowRequest(ShowAppointment):
         use_enum_values = True  
   
 class Login(BaseModel):
-  username: str
+  email: str
   password: str
 
 class Settings(BaseModel):
