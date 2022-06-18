@@ -75,3 +75,7 @@ def test_put_one_doctor():
     assert response.json()["id_kki"] == "string"
     assert response.json()["specialist"] == "string"
 
+def test_delete_one_doctor():
+    response = client.delete("/doctor/delete/15")
+
+    assert response.status_code == 200
